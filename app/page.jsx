@@ -27,33 +27,36 @@ And as always with dynamic content, beware of layout shifts & flicker! (here, we
 
 const ctx = getNetlifyContext();
 
+const handleShare = async () => {
+    try {
+        // setMobShareButtonClicked(true);
+        console.log("uttam")
+        if (navigator.share) {
+            const response = await fetch("https://fpstatic.cashstar.com/faceplates/DTTGEEK3Y/MASTER-1.jpg");
+            const blob = await response.blob();
+            const file = new File([blob], 'egift.jpg', { type: blob.type });
+
+            const message = `Hi Satoru,\nHere’s a Starbucks eGift - enjoy it!\n\n¥1,000 Starbucks eGift 🎁\nhttps://shorturl.at/vzDHK\n\nThis URL is valid for 365 days.`;
+
+            await navigator.share({
+                // title: 'Starbucks eGift',
+                text: message,
+                // url: sharableLink,
+                files: [file]
+            });
+        } else {
+            // logError('Web Share API not supported');
+        }
+    } catch (error) {
+        // logError(error);
+    }
+};
+
 export default function Page() {
     return (
-        <main className="flex flex-col gap-8 sm:gap-16">
-            <section className="flex flex-col items-start gap-3 sm:gap-4">
-                <ContextAlert />
-                <h1 className="mb-0">Netlify Platform Starter - Next.js</h1>
-                <p className="text-lg">Get started with Next.js and Netlify in seconds.</p>
-                <Link
-                    href="https://docs.netlify.com/frameworks/next-js/overview/"
-                    className="btn btn-lg btn-primary sm:btn-wide"
-                >
-                    Read the Docs
-                </Link>
-            </section>
-            {!!ctx && (
-                <section className="flex flex-col gap-4">
-                    <Markdown content={contextExplainer} />
-                    <RuntimeContextCard />
-                </section>
-            )}
-            <section className="flex flex-col gap-4">
-                <Markdown content={preDynamicContentExplainer} />
-                <RandomQuote />
-                <Markdown content={postDynamicContentExplainer} />
-            </section>
-            {/* !!cards?.length && <CardsGrid cards={cards} /> */}
-        </main>
+        <div className="App">
+            <button style={{marginTop:'100px',width:'200px',height:'100px'}} onClick={handleShare}>Share</button>
+        </div>
     );
 }
 
